@@ -1,0 +1,35 @@
+#!/bin/bash
+set -ex
+
+if [[ "$(basename $PWD)" != "realm" ]];then
+        mkdir -p realm
+        cd realm
+fi
+
+if [ ! -f realm ];then
+        curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm
+fi
+chmod +x realm
+echo "" > ./realm.yaml
+cat << EOF >> ./realm.yaml
+version: '3'
+services:
+EOF
+for i in $@;do
+        source_addr=$(echo "$i" | awk -F'-' '{print $1}')
+        target_addr=$(echo "$i" | awk -F'-' '{print $2}')
+        source_host=$(echo "$source_addr" | awk -F':' '{print $1}')
+        source_port=$(echo "$source_addr" | awk -F':' '{print $2}')
+        target_host=$(echo "$target_addr" | awk -F':' '{print $1}')
+        target_port=$(echo "$target_addr" | awk -F':' '{print $2}')
+        cat << EOF >> ./realm.yaml
+  port-${source_host}-${source_port}:
+    image: busybox:1.37.0-glibc
+    volumes:
+      - ./realm:/usr/bin/realm
+    command: realm -l ${source_host}:${source_port} -r ${target_host}:${target_port}
+    network_mode: host
+    restart: always
+EOF
+done
+docker compose -f realm.yaml -p realm up -d
