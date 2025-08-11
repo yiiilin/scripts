@@ -3,9 +3,9 @@ set -ex
 
 if ! docker info || ! docker compose -v;then
   if [ $(cat /etc/os-release | grep -E "^NAME=" | tr A-Z a-z | grep -c debian) -eq 1 ];then
-    bash <(curl -L curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/docker/install_docker.sh)
+    bash <(curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/docker/install_docker.sh)
   else
-    echo "we need docker and docker compose!"
+    echo "we need docker and docker compose, please install them first!"
     exit 1
   fi
 fi
