@@ -16,6 +16,8 @@ bash <(curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main
 
 通过以下命令安装
 
+一下命令即将本地的`11111`和`22222`端口，分别转发到`1.1.1.1:11111`和`2.2.2.2:22222`
+
 ```shell
-bash <(curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm.sh)
+bash <(curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm.sh) 0.0.0.0:11111-1.1.1.1:11111 0.0.0.0:22222-2.2.2.2:22222
 ```
