@@ -1,6 +1,15 @@
 #!/bin/bash
 set -ex
 
+if ! docker info || ! docker compose -v;then
+  if [ $(cat /etc/os-release | grep -E "^NAME=" | tr A-Z a-z | grep -c debian) -eq 1 ];then
+    bash <(curl -L curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/docker/install_docker.sh)
+  else
+    echo "we need docker and docker compose!"
+    exit 1
+  fi
+fi
+
 if [[ "$(basename $PWD)" != "realm" ]];then
         mkdir -p realm
         cd realm
