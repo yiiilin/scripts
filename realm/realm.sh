@@ -19,8 +19,11 @@ if [ ! -f realm ];then
         curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm
 fi
 chmod +x realm
-echo "" > ./realm.yaml
-cat << EOF >> ./realm.yaml
+
+cat > ./realm.sh.tmp << 'EOF'
+bash <(curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm.sh)
+EOF
+cat << EOF > ./realm.yaml
 version: '3'
 services:
 EOF
@@ -40,5 +43,14 @@ for i in $@;do
     network_mode: host
     restart: always
 EOF
+  cat >> ./realm.sh.tmp << EOF
+${source_host}:${source_port}-${target_host}:${target_port}
+EOF
 done
+
+sed -i ':a;N;$!ba;s/\n/ /g' ./realm.sh.tmp
+chmod +x ./realm.sh.tmp
+rm -f ./realm.sh
+mv ./realm.sh.tmp ./realm.sh
+
 docker compose -f realm.yaml -p realm up -d
