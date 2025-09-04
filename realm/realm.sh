@@ -16,7 +16,7 @@ if [[ "$(basename $PWD)" != "realm" ]];then
 fi
 
 if [ ! -f realm ];then
-        curl -L https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm
+        curl -OL https://raw.githubusercontent.com/yiiilin/scripts/refs/heads/main/realm/realm
 fi
 chmod +x realm
 
